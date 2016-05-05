@@ -5,10 +5,10 @@
  */
 
 
-var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons', 'jkAngularRatingStars', 'ngCookies']).config(function($httpProvider) {
+var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons', 'jkAngularRatingStars', 'ngCookies', 'ui.bootstrap']).config(function($httpProvider) {
 //    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-  //  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-    
+  //  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';    
+  
 });
 
 app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$rootScope', '$http',
@@ -18,6 +18,8 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   $rootScope.isFoodie = false;
   $rootScope.isRestaurant = false;
   $rootScope.User = {};
+  $rootScope.oldComment = {};
+  $rootScope.RestaurantComments = {};
         
   
   $scope.toggleSidenav = function(menuId) {
@@ -41,6 +43,11 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
       link : '',
       title: 'Messages',
       icon: 'message'
+    },
+    {
+        link: '',
+        title: 'Comments',
+        icon: 'comment'
     }
   ];
   
@@ -59,6 +66,11 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
       link : '',
       title: 'Disches',
       icon: 'add'
+    },
+    {
+        link : '',
+        title: 'Comment',
+        icon: 'comment'
     }
   ];
   
@@ -125,7 +137,7 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   };
   
   $scope.foddie = function(item, ev) {
-              console.log($rootScope.Foodie);
+              console.log($rootScope.User);
       if (item.title === "Profil")
       {
          $mdDialog.show({
@@ -148,7 +160,90 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
           targetEvent: ev
       });
       }
+      else if (item.title === "Comments") {
+          $http({
+              method:'GET',
+              url:'http://127.0.0.1:3000/api/restaurants'
+          }).then(function successCallback(response) {
+              $rootScope.Note = [
+                  {
+                      "number": 1 
+                  },
+                  {
+                      "number": 2
+                  },
+                  {
+                      "number": 3 
+                  },
+                  {
+                      "number": 4 
+                  },
+                  {
+                      "number": 5 
+                  }
+              ];
+              $rootScope.Restaurants = response.data.Restaurants;
+          }, function errorCallback(response) {
+              alert('Error while get the Restaurant.');
+          });
+          $http({
+              method:'GET',
+              url:'http://127.0.0.1:3000/api/foodies/' + $rootScope.User.FoodieId + '/comment_restaurants'
+          }).then(function successCallback(response) {
+              $rootScope.oldComment = response.data.Comment_restaurants;
+          }, function errorCallback(response) {
+               alert('Error while getting your old comments.');
+          });
+       $mdDialog.show({
+          controller: DialogController,
+          templateUrl:'template/comments_foodie.html',
+          targetEvent: ev
+      });   
+      }
   };
+  
+  $scope.restaurant = function(item,ev) {
+    if (item.title === "Profil")
+    {
+        $mdDialog.show({
+        controller: DialogController,
+        templateUrl:'template/profil_restaurant.html',
+        targetEvent: ev
+        });
+    }
+    else if (item.title === "Menus")
+    {
+        $mdDialog.show({
+        controller: DialogController,
+        templateUrl:'template/menu_restaurant.html',
+        targetEvent: ev
+        });
+    }
+    else if (item.title === "Disches")
+    {
+        $mdDialog.show({
+        controller: DialogController,
+        templateUrl:'template/disches_restaurant.html',
+        targetEvent: ev
+        });
+    }
+    else if (item.title === "Comment")
+    {
+        $http({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/restaurant/' + $rootScope.User.RestaurantId + '/comment_restaurants'
+        }).then(function successCallback(response) {
+            $rootScope.RestaurantComments = response.data.Comment_restaurants;
+        }, function errorCallback(response) {
+            alert('Error while getting your comments.');
+        });
+        $mdDialog.show({
+        controller: DialogController,
+        templateUrl:'template/comments_restaurant.html',
+        targetEvent: ev
+        });
+    }
+  },
   
   $scope.registration = function(ev) {
       $mdDialog.show({
@@ -176,7 +271,9 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
 function DialogController($scope, $mdDialog, $http, $rootScope) {
     $scope.foddieRegistration = {};
     $scope.restaurant = {};
-     
+    $scope.comment = {};
+    $scope.updateComment = {};
+    
     $scope.connection = function() {
       $http({
         method:'POST',
@@ -265,6 +362,69 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
                 alert('update status: ' + response.status + ' data: ' + response.data);
       });
          
+    };
+    
+    $scope.CreateComment = function()
+    {
+        console.log($scope.comment);
+        var tmp = {};
+        tmp.restaurantId = $scope.comment.restaurantId.Id;
+        tmp.comment = $scope.comment.comment;
+        tmp.mark = $scope.comment.mark.number;
+        tmp.baseUserId = $rootScope.User.Id;
+        tmp._token = $rootScope.User.Token;
+        
+        $http({
+            method:'POST',
+            url:'http://127.0.0.1:3000/api/foodies/' + $rootScope.User.FoodieId + '/comment_restaurants',
+            data: tmp
+        }).then(function successCallback(response) {
+            alert('Your comment is posted.');
+        }, function errorCallback(response) {
+             alert('Fail to post your comment.');
+        });
+        $scope.cancel();
+    };
+    
+    $scope.updateFielInOld = function()
+    {
+    };
+    
+    $scope.UpdateComment = function()
+    {
+      console.log($scope.updateComment);
+      var tmp = {};
+      tmp.restaurantId = $scope.updateComment.comment.RestaurantId;
+      tmp.comment = $scope.updateComment.comment.Comment;
+      tmp.mark = $scope.updateComment.comment.Mark;
+      tmp.baseUserId = $rootScope.User.Id;
+      tmp._token = $rootScope.User.Token;
+      
+      $http({
+         method:'PUT',
+         url:'http://127.0.0.1:3000/api/foodies/' + $rootScope.User.FoodieId + '/comment_restaurants/' + $scope.updateComment.comment.Id,
+         data: tmp
+      }).then(function successCallback(response) {
+          alert('Your comment is updated.');
+      }, function errorCallback(response) {
+          alert('Fail to update your comment.');
+      });
+      $scope.cancel();
+    };
+    
+    $scope.DeleteComment = function()
+    {
+        var tmp = {};
+        tmp.baseUserId = $rootScope.User.Id;
+        tmp._token = $rootScope.User.Token;
+
+        $http.delete('http://127.0.0.1:3000/api/foodies/' + $rootScope.User.FoodieId + '/comment_restaurants/' + $scope.updateComment.comment.Id,
+{params: {baseUserId: $rootScope.User.Id, _token: $rootScope.User.Token}}).then(function successCallback(response) {
+            alert('Your comment is deleted.');
+        }, function errorCallback(response) {
+            alert('Fail to delete your comment.');            
+        });
+      $scope.cancel();              
     };
     
     $scope.interests = [

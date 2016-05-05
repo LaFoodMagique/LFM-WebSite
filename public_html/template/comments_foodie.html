@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <md-dialog aria-label="Mango (Fruit)" style="width: 65%;" ng-cloak>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Comments</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="img/close-24.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-content>
+                <md-tabs md-dynamic-height md-border-bottom>
+                    <br>
+                                <md-tab label="Create">
+                                    <br>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <select style="width: 950px;" ng-options="item as item.FirstName for item in $root.Restaurants track by item.Id" ng-model="comment.restaurantId"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <textarea style="width: 950px;" ng-model="comment.comment"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <select ng-options="item as item.number for item in $root.Note track by item.number" ng-model="comment.mark"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <md-button class="md-raised btn pull-right" ng-click="CreateComment()">Valider</md-button>
+                                    </div>
+                                </md-tab>
+                                <md-tab label="Old">
+                                    <br>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <select style="width: 950px;" ng-change="updateFielInOld()" ng-options="item as item.Restaurant for item in $root.oldComment track by item.Id" ng-model="updateComment.comment"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <textarea style="width: 950px;" ng-model="updateComment.comment.Comment"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <select ng-model="updateComment.comment.Mark">
+                                                    <option ng-repeat="item in $root.Note" value="{{item.number}}" ng-selected="item.number === updateComment.comment.Mark">{{item.number}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <md-button class="md-raised btn pull-right" ng-click="UpdateComment()">Update</md-button>
+                                        <md-button class="md-raised btn pull-left" ng-click="DeleteComment()">Delete</md-button>
+                                    </div>
+                                </md-tab>
+                </md-tabs>
+            </md-content>
+        </md-dialog>
+    </body>
+</html>
