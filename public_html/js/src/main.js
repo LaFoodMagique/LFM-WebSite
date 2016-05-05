@@ -5,13 +5,25 @@
  */
 
 
-var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons']);
+var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons', 'jkAngularRatingStars', 'ngCookies']).config(function($httpProvider) {
+//    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+  //  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    
+});
 
-app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', 
-    function($scope, $mdBottomSheet, $mdSidenav, $mdDialog){
+app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$rootScope', '$http',
+    function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $rootScope, $http){
+  
+  $rootScope.isConnected = false;
+  $rootScope.isFoodie = false;
+  $rootScope.isRestaurant = false;
+  $rootScope.User = {};
+        
+  
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
   };
+  
   
   
  $scope.foddies = [
@@ -48,6 +60,21 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
       title: 'Disches',
       icon: 'add'
     }
+  ];
+  
+  $scope.interests = [
+      {
+        title   : 'music',
+        note    : 3
+      },
+      {
+          title : 'spicy food',
+          note  : 0
+      },
+      {
+          title : 'beer',
+          note  : 5
+      }
   ];
   
   $scope.activity = [
@@ -97,6 +124,31 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
     });
   };
   
+  $scope.foddie = function(item, ev) {
+              console.log($rootScope.Foodie);
+      if (item.title === "Profil")
+      {
+         $mdDialog.show({
+          controller: DialogController,
+          templateUrl:'template/profil_foodie.html',
+          targetEvent: ev
+      });
+      }
+      else if (item.title === "Interests") {
+          $mdDialog.show({
+          controller: DialogController,
+          templateUrl:'template/interest_foodie.html',
+          targetEvent: ev
+      });
+      }
+      else if (item.title === "Messages") {
+         $mdDialog.show({
+          controller: DialogController,
+          templateUrl:'template/messages_foodie.html',
+          targetEvent: ev
+      });
+      }
+  };
   
   $scope.registration = function(ev) {
       $mdDialog.show({
@@ -113,9 +165,123 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
        targetEvent: ev
     });
   };
+  
+  $scope.logout = function() {
+      $rootScope.isConnected = false;
+      $rootScope.isFoodie = false;
+      alert('Logout effectué');
+  };
 }]);
 
-function DialogController($scope, $mdDialog) {
+function DialogController($scope, $mdDialog, $http, $rootScope) {
+    $scope.foddieRegistration = {};
+    $scope.restaurant = {};
+     
+    $scope.connection = function() {
+      $http({
+        method:'POST',
+        url:'http://127.0.0.1:3000/api/login/',
+        data: $scope.foodie
+      }).then(function successCallback(response) {
+          $rootScope.User = response.data.User;
+          $rootScope.isConnected = true;
+          if (response.data.User.IsFoodie) {
+            $rootScope.isFoodie = true;
+            $rootScope.isRestaurant = false;
+          }
+          else {
+            $rootScope.isFoodie = false;
+            $rootScope.isRestaurant = true;
+          }            
+          $scope.cancel();
+      }, function errorCallback(response) {
+          alert('Connection fail');
+      });
+    };
+
+    $scope.registration = function() {
+        $scope.foddieRegistration.isFoodie = 1;
+      $http({
+          method:'POST',
+          url: 'http://127.0.0.1:3000/api/users',
+          data: $scope.foddieRegistration
+        }).then(function successCallback(response) {
+            $scope.foodie = {};
+            $scope.foodie.email = $scope.foddieRegistration.email;
+            $scope.foodie.password = $scope.foddieRegistration.password;
+            $http({
+            method:'POST', 
+            url: 'http://127.0.0.1:3000/api/login',
+            data: $scope.foodie
+        }).then(function successCallback(response) {
+            $rootScope.isConnected = true;
+            $rootScope.isFoodie = true;
+            $rootScope.isRestaurant = false;
+            $scope.cancel();
+        }, function errorCallback(response) {
+            alert('Connection fail status: ' + response.status + ' data: ' + response.data);
+        });
+  
+        }, function errorCallback(response) {
+            alert('Registration fail status: ' + response.status + ' data: ' + response.data);
+        });
+    };
+
+    $scope.registrationRestaurant = function() {
+        $scope.restaurant.isFoodie = 0;
+        $http({
+           method:'POST',
+           url: 'http://127.0.0.1:3000/api/users/',
+           data: $scope.restaurant
+        }).then(function successCallback(response) {
+            $scope.restaurantTemps = {};
+            $scope.restaurantTemps.email = $scope.restaurant.email;
+            $scope.restaurantTemps.password = $scope.restaurant.password;
+            $http({
+                method:'POST',
+                url: 'http://127.0.0.1:3000/api/login/',
+                data: $scope.restaurantTemps
+            }).then(function successCallback(response) {
+                $rootScope.isConnected = true;
+                $rootScope.isRestaurant = true;
+                $rootScope.isFoodie = false;
+                $scope.cancel();
+            }, function errorCallback(response) {
+                alert('Connection fail status: ' + response.status + ' data: ' + response.data);
+            });
+        }, function errorCallback(response) {
+            alert('Registration fail status: ' + response.status + ' data: ' + response.data);
+        });
+    };
+    
+    $scope.foodieUpdate = function() {
+      $http({
+          method:'PUT',
+          url: 'http://127.0.0.1:8000/foodie/profile/',
+          data: $rootScope.Foodie
+      }).then(function successCallback(response) {
+                alert('update status: ' + response.status + ' data: ' + response.data);
+      }, function errorCallback(response) {
+                alert('update status: ' + response.status + ' data: ' + response.data);
+      });
+         
+    };
+    
+    $scope.interests = [
+      {
+        title   : 'music',
+        note    : 3
+      },
+      {
+          title : 'spicy food',
+          note  : 0
+      },
+      {
+          title : 'beer',
+          note  : 5
+      }
+  ];
+  
   $scope.hide = function() {
     $mdDialog.hide();
   };

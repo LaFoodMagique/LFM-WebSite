@@ -9,22 +9,18 @@ and open the template in the editor.
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Le styles -->
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css"/>
-        <link rel="stylesheet" href="css/style.css" type="text/css"/>
     </head>
     <body>
-    <md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+    <md-dialog aria-label="Mango (Fruit)" style="width: 30%;" ng-cloak>
         <md-toolbar>
-      <div class="md-toolbar-tools">
-          <h2>Inscription</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/close-24.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Inscription</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/close-24.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
         <md-content>
             <md-tabs md-dynamic-height md-border-bottom>
                 <md-tab label="Foodie">
@@ -35,13 +31,27 @@ and open the template in the editor.
                                     <td>
                                     <md-input-container flex>
                                         <label>First name</label>
-                                        <input ng-model="foodie.first_name">
+                                        <input ng-model="foddieRegistration.firstName">
                                     </md-input-container>
                                     </td>
                                     <td>
                                     <md-input-container flex>
                                         <label>Last name</label>
-                                        <input ng-model="foodie.last_name">
+                                        <input ng-model="foddieRegistration.lastName">
+                                    </md-input-container>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <md-input-container flex>
+                                        <label>Email</label>
+                                        <input ng-model="foddieRegistration.email">
+                                    </md-input-container>
+                                    </td>
+                                    <td>
+                                    <md-input-container flex>
+                                        <label>Password</label>
+                                        <input ng-model="foddieRegistration.password">
                                     </md-input-container>
                                     </td>
                                 </tr>
@@ -49,25 +59,19 @@ and open the template in the editor.
                                     <td>
                                     <md-input-container flex>
                                     <label>Phone</label>
-                                    <input ng-model="foodie.phone_number">
+                                    <input ng-model="foddieRegistration.phone">
                                     </md-input-container>
                                     </td>
-                                    <td>
-                                    <md-input-container flex>
-                                        <label>Email</label>
-                                        <input ng-model="foodie.email">
-                                    </md-input-container>
-                                    </td>
-                                </tr>
-                                <tr>
+
                                     <td>
                                 <md-input-container flex>
                                     <label>Adresse</label>
-                                    <input ng-model="address_part_1">
+                                    <input ng-model="foddieRegistration.addressPart1">
                                 </md-input-container>
                                     </td>
                                 </tr>
                             </table>
+                            <md-button class="md-raised btn pull-right" ng-click="registration()">Inscription</md-button>
                         </form>
                     </md-content>
                 </md-tab>
@@ -79,21 +83,21 @@ and open the template in the editor.
                                     <td>
                                 <md-input-container flex>
                                     <label>Name</label>
-                                    <input ng-model="restaurant.name">
+                                    <input ng-model="restaurant.firstName">
                                 </md-input-container>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                <md-input-container flex>
-                                    <label>Phone number</label>
-                                    <input ng-model="restaurant.phone_number">
-                                </md-input-container>
+                                    <md-input-container flex>
+                                        <label>Email</label>
+                                        <input ng-model="restaurant.email">
+                                    </md-input-container>
                                     </td>
                                     <td>
                                     <md-input-container flex>
-                                        <label>email</label>
-                                        <input ng-model="restaurant.email">
+                                        <label>Password</label>
+                                        <input ng-model="restaurant.password">
                                     </md-input-container>
                                     </td>
                                 </tr>
@@ -101,30 +105,24 @@ and open the template in the editor.
                                     <td>
                                 <md-input-container flex>
                                     <label>Adresse</label>
-                                    <input ng-model="restaurant.address_part_1">
+                                    <input ng-model="restaurant.addressPart1">
                                 </md-input-container>
                                     </td>
+                                    <td>
+                                <md-input-container flex>
+                                    <label>Phone number</label>
+                                    <input ng-model="restaurant.phone">
+                                </md-input-container>
+                                    </td>
+
                                 </tr>
                             </table>
+                            <md-button class="md-raised btn pull-right" ng-click="registrationRestaurant()">Inscription</md-button>
                         </form>
                     </md-content>
                 </md-tab>
             </md-tabs>
         </md-content>
     </md-dialog>
-    
-    <script src="js/jquery.js"></script>
-        <script src="js/bootstrap-transition.js"></script>
-        <script src="js/bootstrap-alert.js"></script>
-        <script src="js/bootstrap-modal.js"></script>
-        <script src="js/bootstrap-dropdown.js"></script>
-        <script src="js/bootstrap-scrollspy.js"></script>
-        <script src="js/bootstrap-tab.js"></script>
-        <script src="js/bootstrap-tooltip.js"></script>
-        <script src="js/bootstrap-popover.js"></script>
-        <script src="js/bootstrap-button.js"></script>
-        <script src="js/bootstrap-collapse.js"></script>
-        <script src="js/bootstrap-carousel.js"></script>
-        <script src="js/bootstrap-typeahead.js"></script>
     </body>
 </html>

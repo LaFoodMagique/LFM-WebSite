@@ -7,13 +7,22 @@ and open the template in the editor.
 <html>
     <head>
         <title></title>
-        <meta charset="windows-1252">
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
     <md-dialog aria-label="Mango (Fruit)" ng-cloak>
             <md-content class="md-padding"> 
                 <form name="userConnection"> 
+                    <md-input-container flex>
+                        <label>Email</label>
+                        <input ng-model="foodie.email">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Password</label>
+                        <input ng-model="foodie.password">
+                    </md-input-container>
+                    <md-button ng-click="connection()">Connection</md-button>
                 </form> 
             </md-content> 
     </md-dialog>
