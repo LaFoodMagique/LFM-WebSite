@@ -24,6 +24,44 @@ and open the template in the editor.
             <md-content>
                 <md-tabs md-dynamic-height md-border-bottom>
                     <br>
+                    <md-tab label="See">
+                        <br>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <select ng-model="commentRestaurant.restaurantId" ng-change="updateRestaurant()">
+                                        <option style="width: 950px;" ng-repeat="item in $root.Restaurants" ng-value="item.Id">{{item.FirstName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <md-card flex-gt-sm="90" flex-gt-md="80">
+                                        <md-card-content>
+                                            <md-list>
+                                                <md-item ng-repeat="item in RestaurantComments">
+                                                    <md-item-content>
+                                                        <div class="md-tile-left inset" hide-sm>
+                                                            <user-avatar></user-avatar>
+                                                        </div>
+                                                        <div class="md-tile-content">
+                                                            <h3>{{item.FirstNamme}} {{item.LastName}}</h3>
+                                                            <h4>{{item.Comment}}</h4>
+                                                            <p>
+                                                                {{item.Mark}}
+                                                            </p>
+                                                        </div>
+                                                    </md-item-content>
+                                                    <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                                                    <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                                                </md-item>
+                                            </md-list>
+                                        </md-card-content>
+                                    </md-card>
+                                </div>
+                            </div>
+                        </div>
+                    </md-tab>
                                 <md-tab label="Create">
                                     <br>
                                     <div class="container">
@@ -31,7 +69,9 @@ and open the template in the editor.
                                             <div class="col-md-12">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <select style="width: 950px;" ng-options="item as item.FirstName for item in $root.Restaurants track by item.Id" ng-model="comment.restaurantId"></select>
+                                                        <select ng-model="comment.restaurantId">
+                                                            <option style="width: 950px;" ng-repeat="item in $root.Restaurants" ng-selected="item.Id === $root.Restaurants[0].Id">{{item.FirstName}}</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -41,7 +81,9 @@ and open the template in the editor.
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <select ng-options="item as item.number for item in $root.Note track by item.number" ng-model="comment.mark"></select>
+                                                        <select ng-model="comment.Mark">
+                                                            <option ng-repeat="item in $root.Note" ng-selected="item.number === $root.Note[0].number">{{item.number}}</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>

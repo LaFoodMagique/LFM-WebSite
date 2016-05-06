@@ -20,6 +20,7 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   $rootScope.User = {};
   $rootScope.oldComment = {};
   $rootScope.RestaurantComments = {};
+  $rootScope.Restaurants = {};
         
   
   $scope.toggleSidenav = function(menuId) {
@@ -272,7 +273,20 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
     $scope.foddieRegistration = {};
     $scope.restaurant = {};
     $scope.comment = {};
+    $scope.commentRestaurant ={};
+    $scope.RestaurantComments = {};
     $scope.updateComment = {};
+    
+    $scope.updateRestaurant = function() {
+      $http({
+          method:'GET',
+          url:'http://127.0.0.1:3000/api/restaurant/' + $scope.commentRestaurant.restaurantId + '/comment_restaurants'
+      }).then(function successCallback(response) {
+          $scope.RestaurantComments = response.data.Comment_restaurants;
+      }, function errorCallback(response) {
+          alert('Fail to load to comment.');
+      });
+    };
     
     $scope.connection = function() {
       $http({
