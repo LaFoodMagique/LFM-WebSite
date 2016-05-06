@@ -22,6 +22,7 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   $rootScope.RestaurantComments = {};
   $rootScope.Restaurants = {};
   $rootScope.RestaurantDisches = {};
+  $rootScope.RestaurantMenus = {};
   $rootScope.Disches = {};
         
   
@@ -216,6 +217,16 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
     }
     else if (item.title === "Menus")
     {
+        $http({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/menus'
+        }).then(function successCallback(response) {
+            $rootScope.RestaurantMenus = response.data.Menus;
+            console.log($rootScope.RestaurantMenus);
+        }, function errorCallback(response) {
+            alert('Error while getting your menus.');
+        });
+        
         $mdDialog.show({
         controller: DialogController,
         templateUrl:'template/menu_restaurant.html',
