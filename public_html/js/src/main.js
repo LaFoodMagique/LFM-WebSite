@@ -21,6 +21,8 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   $rootScope.oldComment = {};
   $rootScope.RestaurantComments = {};
   $rootScope.Restaurants = {};
+  $rootScope.RestaurantDisches = {};
+  $rootScope.Disches = {};
         
   
   $scope.toggleSidenav = function(menuId) {
@@ -222,9 +224,27 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
     }
     else if (item.title === "Disches")
     {
+        $http({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/dishes'
+        }).then(function successCallback(response) {
+            $rootScope.RestaurantDisches = response.data.Dishes;
+        }, function errorCallback(response) {
+             alert('Error while getting your dishes.');
+        });
+        
+        $http({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/dishes'
+        }).then(function successCallback(response) {
+            $rootScope.Disches = response.data.Dishes;
+        }, function errorCallback(response) {
+            alert('Error while getting the dishes.');
+        });
+        
         $mdDialog.show({
         controller: DialogController,
-        templateUrl:'template/disches_restaurant.html',
+        templateUrl:'template/dishes_restaurant.html',
         targetEvent: ev
         });
     }
@@ -276,6 +296,27 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
     $scope.commentRestaurant ={};
     $scope.RestaurantComments = {};
     $scope.updateComment = {};
+    $scope.dish = {};
+    
+    $scope.addDish = function() {
+        console.log($scope.dish);
+        var tmp = {};
+        if (!$scope.dish.dishId)
+            $scope.dish.dishId = $rootScope.Disches[0].Id;
+        tmp.dishId = $scope.dish.dishId;
+        tmp.baseUserId = $rootScope.User.Id;
+        tmp._token = $rootScope.User.Token;
+      $http({
+          method:'POST',
+          url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/dishes',
+          data: tmp
+      }).then(function successCallback(response) {
+          alert('The dishes is linked to you.');
+      }, function errorCallback(response) {
+          alert('Fail to link the dish.');
+      });
+      $scope.cancel();
+    };
     
     $scope.updateRestaurant = function() {
       $http({
