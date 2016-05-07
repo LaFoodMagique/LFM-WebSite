@@ -222,9 +222,20 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
             url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/menus'
         }).then(function successCallback(response) {
             $rootScope.RestaurantMenus = response.data.Menus;
-            console.log($rootScope.RestaurantMenus);
+            for (var i = 0; i < $rootScope.RestaurantMenus.length; i++) {
+                $rootScope.RestaurantMenus[i].isCollapsed = true;
+             }
         }, function errorCallback(response) {
             alert('Error while getting your menus.');
+        });
+        
+        $http({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/dishes'
+        }).then(function successCallback(response) {
+            $rootScope.Disches = response.data.Dishes;
+        }, function errorCallback(response) {
+            alert('Error while getting the dishes.');
         });
         
         $mdDialog.show({
@@ -308,9 +319,61 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
     $scope.RestaurantComments = {};
     $scope.updateComment = {};
     $scope.dish = {};
+    $scope.add = {};
+    $scope.menu = {};
+    
+    $scope.addMenu = function() {
+      $scope.menu.baseUserId = $rootScope.User.Id;
+      $scope.menu._token = $rootScope.User.Token;
+      $http({
+         method:'POST',
+         url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/menus',
+         data: $scope.menu
+      }).then(function successCallback(response) {
+          alert('The menu is add to your restaurant.');
+      }, function errorCallback(reponse) {
+          alert('Fail to add the menu to your restaurant');
+      });
+      //$scope.cancel();
+    };
+    
+    $scope.addDishInMenu = function(menuId) {
+      var tmp = {};
+      tmp.baseUserId = $rootScope.User.Id;
+      tmp._token = $rootScope.User.Token;
+      $http({
+         method:'POST',
+         url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/menus/' + menuId + '/dishes/' + $scope.add.dishId,
+         data: tmp
+      }).then(function successCallback(response) {
+          alert('The dishes add to your menu.');
+      }, function errorCallback(response) {
+          alert('Fail to add the dish to your menu.');
+      });
+      $scope.cancel();
+    };
+    
+    $scope.deleteDishInMenu = function(menuId, dishId) {
+      $http.delete('http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/menus/' + menuId + '/dishes/' + dishId,
+        {params: {baseUserId: $rootScope.User.Id, _token: $rootScope.User.Token}}).then(function successCallback(response) {
+            alert('The dish is deleted.');
+        }, function errorCallback(response) {
+            alert('Fail to delete the dish.');
+        });
+        $scope.cancel();
+    };
+    
+    $scope.deleteMenu = function(menuId) {
+        $http.delete('http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/menus/' + menuId,
+        {params: {baseUserId: $rootScope.User.Id, _token: $rootScope.User.Token}}).then(function successCallback(response) {
+            alert('The menu is deleted.');
+        }, function errorCallback(response) {
+            alert('Fail to delete the menu.');
+        });
+        $scope.cancel();
+    };
     
     $scope.addDish = function() {
-        console.log($scope.dish);
         var tmp = {};
         if (!$scope.dish.dishId)
             $scope.dish.dishId = $rootScope.Disches[0].Id;
