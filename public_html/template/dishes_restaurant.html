@@ -32,6 +32,9 @@ and open the template in the editor.
                                     <md-card-content>
                                         <md-list>
                                             <md-item ng-repeat="item in $root.RestaurantDisches">
+                                                <md-button class="md-raised btn pull-right"  ng-click="deleteDish(item.LinkId)">Delete</md-button>
+                                                <br>
+                                                <br>
                                                 <md-item-content>
                                                     <div class="md-tile-left inset" hide-sm>
                                                         <user-avatar></user-avatar>
@@ -61,7 +64,7 @@ and open the template in the editor.
                                 </select>
                             </div>
                         </div>
-                        <md-button class="md-raised btn pull-right" ng-click="addDish()">Update</md-button>
+                        <md-button class="md-raised btn pull-right" ng-click="addDish()">Add</md-button>
                     </div>
                 </md-tab>
             </md-tabs>

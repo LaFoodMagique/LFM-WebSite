@@ -257,7 +257,7 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
         
         $http({
             method:'GET',
-            url:'http://127.0.0.1:3000/api/dishes'
+            url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/dishesNotUsed'
         }).then(function successCallback(response) {
             $rootScope.Disches = response.data.Dishes;
         }, function errorCallback(response) {
@@ -321,6 +321,16 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
     $scope.dish = {};
     $scope.add = {};
     $scope.menu = {};
+    
+    $scope.deleteDish = function(lId) {
+        $http.delete('http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/dishes/' + lId,
+        {params: {baseUserId: $rootScope.User.Id, _token: $rootScope.User.Token}}).then(function successCallback(response) {
+            alert('The dish is deleted.');
+        }, function errorCallback(response) {
+            alert('Fail to delete the dish.');
+        });
+        $scope.cancel();
+    };
     
     $scope.addMenu = function() {
       $scope.menu.baseUserId = $rootScope.User.Id;
