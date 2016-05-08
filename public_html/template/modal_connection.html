@@ -12,17 +12,36 @@ and open the template in the editor.
     </head>
     <body>
     <md-dialog aria-label="Mango (Fruit)" ng-cloak>
-            <md-content class="md-padding"> 
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Inscription</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/close-24.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+            <md-content> 
                 <form name="userConnection"> 
-                    <md-input-container flex>
-                        <label>Email</label>
-                        <input ng-model="foodie.email">
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>Password</label>
-                        <input ng-model="foodie.password">
-                    </md-input-container>
-                    <md-button ng-click="connection()">Connection</md-button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <md-input-container flex>
+                                <label>Email</label>
+                                <input ng-model="foodie.email">
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div style="" class="row">
+                        <div class="col-md-12">
+                            <md-input-container>
+                                <label>Password</label>
+                                <input ng-model="foodie.password">
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <md-button class="md-raised btn pull-right" ng-click="connection()">Connection</md-button>
+                    </div>
                 </form> 
             </md-content> 
     </md-dialog>

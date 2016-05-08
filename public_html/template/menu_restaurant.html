@@ -35,7 +35,7 @@ and open the template in the editor.
                                                 <label>Enter search</label>
                                                 <input ng-model="search.Name">
                                             </md-input-container>
-                                            <md-card flex-gt-sm="90" flex-gt-md="80">
+                                            <md-card>
                                                 <md-card-content>
                                                     <md-list>
                                                         <md-item ng-repeat="item in $root.RestaurantMenus | filter:search">
@@ -57,7 +57,7 @@ and open the template in the editor.
                                                             <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                                 
                                                             <div class="row" ng-show="item.isCollapsed === true" ng-hide="item.isCollapsed === false">                                                                
-                                                                <md-card style="background-color: #eee;" flex-gt-sm="90" flex-gt-md="80">
+                                                                <md-card style="background-color: #eee;">
                                                                     <md-card-content>
                                                                         <h2>Dishes</h2>
                                                                         <select ng-model="add.dishId">
@@ -111,7 +111,7 @@ and open the template in the editor.
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <label>Description</label>
+                                <label>Date</label>
                                 <textarea style="width: 950px;" ng-model="menu.description"></textarea>
                             </div>
                         </div>

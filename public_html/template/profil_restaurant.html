@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+    <md-dialog aria-label="Mango (Fruit)"ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Profil</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/close-24.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content class="md-padding">
+            <form name="updateRestaurant">
+                <table>
+                    <tr>
+                        <td>
+                            <md-input-container flex>
+                                <label>First name</label> 
+                                <input ng-model="$root.User.FirstName">
+                            </md-input-container>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <md-input-container flex>
+                                <label>Email</label> 
+                                <input ng-model="$root.User.Email">
+                            </md-input-container>
+                        </td>
+                        <td>
+                            <md-input-container flex>
+                                <label>Phone number</label> 
+                                <input ng-model="$root.User.Phone">
+                            </md-input-container>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <md-input-container flex>
+                                <label>address part 1</label> 
+                                <input ng-model="$root.User.AddressPart1">
+                            </md-input-container>
+                        </td>
+                        <td>
+                            <md-input-container flex>
+                                <label>address part 2</label> 
+                                <input ng-model="$root.User.AddressPart2">
+                            </md-input-container>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Open hour</label> 
+                            <ng-timepicker initTime="{{$root.User.OpenHour}}" ng-model="$root.User.OpenHour"></ng-timepicker>
+                        </td>
+                        <td>
+                            <label>Close hour</label>
+                            <ng-timepicker initTime="{{$root.User.CloseHour}}" ng-model="$root.User.CloseHour"></ng-timepicker>
+                        </td>
+                    </tr>
+                </table>
+                <md-button class="md-raised btn pull-right" ng-click="restaurantUpdate()">Update</md-button>
+            </form>
+        </md-content>
+    </md-dialog>
+    </body>
+</html>

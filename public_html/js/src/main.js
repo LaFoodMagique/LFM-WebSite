@@ -5,11 +5,8 @@
  */
 
 
-var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons', 'jkAngularRatingStars', 'ngCookies', 'ui.bootstrap']).config(function($httpProvider) {
-//    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-  //  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';    
-  
-});
+var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons', 'jkAngularRatingStars',
+    'ngCookies', 'ui.bootstrap', 'ngMessages', 'material.svgAssetsCache', 'jkuri.timepicker']);
 
 app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$rootScope', '$http',
     function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $rootScope, $http){
@@ -21,6 +18,7 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   $rootScope.oldComment = {};
   $rootScope.RestaurantComments = {};
   $rootScope.Restaurants = {};
+  $rootScope.AllRestaurants = {};
   $rootScope.RestaurantDisches = {};
   $rootScope.RestaurantMenus = {};
   $rootScope.Disches = {};
@@ -52,6 +50,11 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
         link: '',
         title: 'Comments',
         icon: 'comment'
+    },
+    {
+        link:'',
+        title:'Restaurant',
+        icon:'restaurant'
     }
   ];
   
@@ -204,11 +207,34 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
           targetEvent: ev
       });   
       }
+      else if (item.title === "Restaurant") {
+          
+          $http({
+              method:'GET',
+              url:'http://127.0.0.1:3000/api/restaurants'
+          }).then(function succesCallback(response) {
+              $rootScope.AllRestaurants = response.data.Restaurants;
+              for (var i = 0; i < $rootScope.AllRestaurants.length; i++) {
+                $rootScope.AllRestaurants[i].isCollapsed = false;
+                $rootScope.AllRestaurants[i].isCollapsedComment = false;
+                $rootScope.AllRestaurants[i].showReservation = false;                
+             }
+              console.log($rootScope.AllRestaurants);
+          }, function errorCallback(response) {
+              alert('Error while getting the restaurants.');
+          });
+         $mdDialog.show({
+          controller: DialogController,
+          templateUrl:'template/restaurant_foodie.html',
+          targetEvent: ev
+      }); 
+      }
   };
   
   $scope.restaurant = function(item,ev) {
     if (item.title === "Profil")
     {
+        console.log($rootScope.User);
         $mdDialog.show({
         controller: DialogController,
         templateUrl:'template/profil_restaurant.html',
@@ -321,6 +347,90 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
     $scope.dish = {};
     $scope.add = {};
     $scope.menu = {};
+    $scope.addDishes = {};
+    
+    $scope.restaurantUpdate = function() {
+        $rootScope.User.baseUserId = $rootScope.User.Id;
+        $rootScope.User._token = $rootScope.User.Token;
+        $http({
+            method:'PUT',
+            url:'http://127.0.0.1:3000/api/users/' + $rootScope.User.Id,
+            data: $rootScope.User            
+        }).then(function successCallback(response) {
+            alert('Your restaurant is updated.');
+        }, function errorCallback(response) {
+            alert('Fail to update your restaurant.');
+        });
+        $scope.cancel();
+    };
+    
+    $scope.addReservation = function(id) {
+    };
+    
+    $scope.loadComsRestaurant = function(restaurantId, restaurantIndex) {
+      $http({
+          method:'GET',
+          url:'http://127.0.0.1:3000/api/restaurant/' + restaurantId + '/comment_restaurants'
+      }).then(function successCallback(response) {
+          $rootScope.AllRestaurants[restaurantIndex].Comment = response.data.Comment_restaurants;
+          $rootScope.AllRestaurants[restaurantIndex].isCollapsedComment = !$rootScope.AllRestaurants[restaurantIndex].isCollapsedComment;
+      }, function errorCallback(response) {
+          alert('Fail to load the coms.');
+      });
+    };
+    
+    $scope.loadComs = function(restaurantId, restaurantIndex, menuId, menuIndex) {
+      $http({
+          method:'GET',
+          url:'http://127.0.0.1:3000/api/restaurants/' + restaurantId +'/menus/' + menuId + '/comments'
+      }).then(function successCallback(response) {
+          $rootScope.AllRestaurants[restaurantIndex].Menu[menuIndex].Comment = response.data.Comment_menu;
+          $rootScope.AllRestaurants[restaurantIndex].Menu[menuIndex].isCollapsed = !$rootScope.AllRestaurants[restaurantIndex].Menu[menuIndex].isCollapsed;
+      }, function errorCallback(response) {
+          alert('Fail to load the coms.');
+      });
+    };
+    
+    $scope.loadComsDish = function(restaurantId, restaurantIndex, dishId, dishIndex) {
+      $http({
+         method:'GET',
+         url:'http://127.0.0.1:3000/api/restaurants/' + restaurantId + '/dishes/' + dishId + '/comments'
+      }).then(function successCallback(response) {
+          $rootScope.AllRestaurants[restaurantIndex].Dish[dishIndex].Comment = response.data.Comments;
+          $rootScope.AllRestaurants[restaurantIndex].Dish[dishIndex].isCollapsed = !$rootScope.AllRestaurants[restaurantIndex].Dish[dishIndex].isCollapsed;
+      }, function errorCallback(response) {
+          alert('Fail to load the coms.');
+      });
+    };
+    
+    $scope.loadMenus = function(Id, index) {
+      $http({
+          method:'GET',
+          url:'http://127.0.0.1:3000/api/restaurants/' + Id + '/menus'
+      }).then(function succesCallback(response) {
+          $rootScope.AllRestaurants[index].Menu = response.data.Menus;
+          $rootScope.AllRestaurants[index].isCollapsed = !$rootScope.AllRestaurants[index].isCollapsed;
+          for (var i = 0; i < $rootScope.AllRestaurants[index].Menu.length; i++) {
+            $rootScope.AllRestaurants[index].Menu[i].isCollapsed = false;
+            $rootScope.AllRestaurants[index].Menu[i].isCollapsedDish = false;            
+          }
+      }, function errorCallback(response) {
+          alert('Fail to load the menus.');
+      });
+      
+      $http({
+          method:'GET',
+          url:'http://127.0.0.1:3000/api/restaurants/' + Id + '/dishes'
+      }).then(function successCallback(response) {
+          $rootScope.AllRestaurants[index].Dish = response.data.Dishes;
+          for (var i = 0; i < $rootScope.AllRestaurants[index].Dish.length; i++) {
+              $rootScope.AllRestaurants[index].Dish[i].isCollapsed = false;
+          }
+      }, function errorCallback(response) {
+          alert('Fail to load the dishes.');
+      });
+      
+    };
     
     $scope.deleteDish = function(lId) {
         $http.delete('http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/dishes/' + lId,
@@ -344,7 +454,7 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
       }, function errorCallback(reponse) {
           alert('Fail to add the menu to your restaurant');
       });
-      //$scope.cancel();
+      $scope.cancel();
     };
     
     $scope.addDishInMenu = function(menuId) {
@@ -384,20 +494,16 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
     };
     
     $scope.addDish = function() {
-        var tmp = {};
-        if (!$scope.dish.dishId)
-            $scope.dish.dishId = $rootScope.Disches[0].Id;
-        tmp.dishId = $scope.dish.dishId;
-        tmp.baseUserId = $rootScope.User.Id;
-        tmp._token = $rootScope.User.Token;
+        $scope.addDishes.baseUserId = $rootScope.User.Id;
+        $scope.addDishes._token = $rootScope.User.Token;
       $http({
           method:'POST',
           url:'http://127.0.0.1:3000/api/restaurants/' + $rootScope.User.RestaurantId + '/dishes',
-          data: tmp
+          data: $scope.addDishes
       }).then(function successCallback(response) {
-          alert('The dishes is linked to you.');
+          alert('The dishes is add to your restaurant.');
       }, function errorCallback(response) {
-          alert('Fail to link the dish.');
+          alert('Fail to add the dish to your restaurant.');
       });
       $scope.cancel();
     };
@@ -503,8 +609,7 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
          
     };
     
-    $scope.CreateComment = function()
-    {
+    $scope.CreateComment = function() {
         console.log($scope.comment);
         var tmp = {};
         tmp.restaurantId = $scope.comment.restaurantId.Id;
@@ -525,12 +630,10 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
         $scope.cancel();
     };
     
-    $scope.updateFielInOld = function()
-    {
+    $scope.updateFielInOld = function() {
     };
     
-    $scope.UpdateComment = function()
-    {
+    $scope.UpdateComment = function() {
       console.log($scope.updateComment);
       var tmp = {};
       tmp.restaurantId = $scope.updateComment.comment.RestaurantId;
@@ -551,8 +654,7 @@ function DialogController($scope, $mdDialog, $http, $rootScope) {
       $scope.cancel();
     };
     
-    $scope.DeleteComment = function()
-    {
+    $scope.DeleteComment = function() {
         var tmp = {};
         tmp.baseUserId = $rootScope.User.Id;
         tmp._token = $rootScope.User.Token;
