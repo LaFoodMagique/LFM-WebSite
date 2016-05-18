@@ -23,7 +23,81 @@ and open the template in the editor.
         </md-toolbar>
         <md-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                
+                <md-tab label="Contacts">
+                    <input ng-model="searchContact.FirstName" placeholder="enter first name">
+                    <md-card>
+                        <md-card-content>
+                            <md-list>
+                                <md-item ng-repeat="item in $root.Contacts | filter:searchContact">
+                                    <div class="row">
+                                        <md-button class="md-raised btn pull-left" ng-show="item.showMessage === true" ng-hide="item.showMessage === false"  ng-click="item.showMessage = !item.showMessage">Hide message</md-button>
+                                        <md-button class="md-raised btn pull-left" ng-show="item.showMessage === false" ng-hide="item.showMessage === true" ng-click="showMessage(item.Id, $index)">Show message</md-button>
+                                        <md-button class="md-raised btn pull-right"  ng-click="sendMessageContact(item.Id)">Send message</md-button>
+                                    </div>
+                                    <div class="row">
+                                        <md-item-content>
+                                            <div class="md-tile-left inset" hide-sm>
+                                                <user-avatar></user-avatar>
+                                            </div>
+                                            <div class="md-tile-content">
+                                                <h3>{{item.FirstName}} {{item.LastName}}</h3>
+                                                <textarea style="width: 500px;" ng-model="sendMessageCct.message">
+                                                Enter your message
+                                                </textarea>
+                                            </div>
+                                      </md-item-content>
+                                      <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                                    <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                                    
+                                    <div class="row" ng-show="item.showMessage === true" ng-hide="item.showMessage === false">
+                                        <md-card>
+                                            <md-list>
+                                              <md-item ng-repeat="message in item.message">
+                                                   <md-item-content>
+                                                      <div class="md-tile-left inset" hide-sm>
+                                                            <user-avatar></user-avatar>
+                                                        </div>
+                                                        <div class="md-tile-content">
+                                                            <h2>{{message.Message}}</h2>
+                                                            <h4>{{message.Creation | date:'short'}}</h4>
+                                                        </div>
+                                                    </md-item-content>
+                                                </md-item>
+                                            </md-list>
+                                        </md-card>
+                                    </div>
+                                    </div>
+                                </md-item>
+                            </md-list>
+                        </md-card-content>
+                    </md-card>
+                    
+                </md-tab>
+                <md-tab label="Users">
+                    <input ng-model="search.FirstName" placeholder="enter first name">
+                    <md-card>
+                        <md-card-content>
+                            <md-list>
+                                <md-item ng-repeat="item in $root.UsersWithoutFoodie | filter:search">
+                                    <md-button class="md-raised btn pull-right"  ng-click="sendMessage(item.Id)">SendMessage</md-button>
+                                    <md-item-content>
+                                        <div class="md-tile-left inset" hide-sm>
+                                            <user-avatar></user-avatar>
+                                        </div>
+                                        <div class="md-tile-content">
+                                            <h3>{{item.FirstName}} {{item.LastName}}</h3>
+                                            <textarea style="width: 500px;" ng-model="sendMessageUser.message">
+                                                Enter your message
+                                            </textarea>
+                                        </div>
+                                  </md-item-content>
+                                  <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                                  <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                                </md-item>
+                            </md-list>
+                        </md-card-content>
+                    </md-card>
+                </md-tab>
             </md-tabs>
         </md-content>
     </md-dialog>

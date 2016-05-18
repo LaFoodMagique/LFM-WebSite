@@ -34,7 +34,8 @@ and open the template in the editor.
                               <h3>{{item.FirstNamme}} {{item.LastName}}</h3>
                               <h4>{{item.Comment}}</h4>
                               <p>
-                                {{item.Mark}}
+                                <uib-rating ng-model="item.Mark" max="max" read-only="true" on-hover="hoveringIver(value)" on-leave="overStar = null" 
+                                          titles="['one', 'two', 'three']" aria-labelledby='default-rating'></uib-rating>
                               </p>
                             </div>
                           </md-item-content>

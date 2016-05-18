@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+    <md-dialog aria-label="Mango (Fruit)" style="width: 50%;" ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Reservation</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/close-24.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content>
+            <md-card>
+                <md-card-content>
+                    <md-list>
+                        <md-item ng-repeat="item in $root.Reservations">
+                            <md-button class="md-raised btn pull-right"  ng-click="deleteReservationFoodie(item.Id)">Delete</md-button>
+                            <md-item-content>
+                                <div class="md-tile-left inset" hide-sm>
+                                    <user-avatar></user-avatar>
+                                </div>
+                                <div class="md-tile-content">
+                                    <h3>Date {{item.Date | date:'short'}} - {{item.Hour}}</h3>
+                                    <h4>Numberof person {{item.NbPerson}}</h4>
+                                    <p>
+                                        Comment : {{item.Comment}}
+                                    </p>
+                                </div>
+                          </md-item-content>
+                          <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                          <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                        </md-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
+        </md-content>
+    </md-dialog>
+    </body>
+</html>

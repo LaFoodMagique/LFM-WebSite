@@ -27,22 +27,13 @@ and open the template in the editor.
         </md-toolbar>
         <md-content>
             <div ng-repeat="interest in interests">
-                 <jk-rating-stars max-rating="8" rating="ctrl.rating" 
-                     read-only="!ctrl.readOnly" on-rating="ctrl.onRating(rating)" >                                      
-                 </jk-rating-stars>
                 <a>
                     <md-item-content md-ink-ripple layout="row" layout-align="start center">
                         <div class="inset">
                             <div class="inset">{{interest.title}}</div>
                         </div>
-                       
-                        <div class="rating">
-                            <a href="#5" title="Donner 5 étoiles">☆</a>
-                            <a href="#4" title="Donner 4 étoiles">☆</a>
-                            <a href="#3" title="Donner 3 étoiles">☆</a>
-                            <a href="#2" title="Donner 2 étoiles">☆</a>
-                            <a href="#1" title="Donner 1 étoile">☆</a>
-                        </div>
+                        <uib-rating ng-model="interest.note" max="max" read-only="isReadonly" on-hover="hoveringIver(value)" on-leave="overStar = null" 
+                            titles="['one', 'two', 'three']" aria-labelledby='default-rating'></uib-rating>                       
                         <div class="inset">
                             <div class="inset">{{interest.note}}</div>
                         </div>
@@ -51,7 +42,5 @@ and open the template in the editor.
             </div>
         </md-content>
     </md-dialog>
-    <script src="js/src/main.js"></script>
-    <script src="js/element/jk-rating-stars.js"></script>
     </body>
 </html>

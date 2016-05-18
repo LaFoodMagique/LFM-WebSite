@@ -11,7 +11,7 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-    <md-dialog aria-label="Mango (Fruit)" style="width: 65%;" ng-cloak>
+    <md-dialog aria-label="Mango (Fruit)" ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Profil</h2>
@@ -27,22 +27,14 @@ and open the template in the editor.
                     <tr>
                         <td>
                             <md-input-container flex>
-                                <label>Username</label> 
-                                <input ng-model="$root.Foodie.username">
-                            </md-input-container>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <md-input-container flex>
                                 <label>First name</label> 
-                                <input ng-model="$root.Foodie.first_name">
+                                <input ng-model="$root.User.FirstName">
                             </md-input-container>
                         </td>
                         <td>
                             <md-input-container flex>
                                 <label>Last name</label> 
-                                <input ng-model="$root.Foodie.last_name">
+                                <input ng-model="$root.User.LastName">
                             </md-input-container>
                         </td>
                     </tr>
@@ -50,13 +42,13 @@ and open the template in the editor.
                         <td>
                             <md-input-container flex>
                                 <label>Email</label> 
-                                <input ng-model="$root.Foodie.email">
+                                <input ng-model="$root.User.Email">
                             </md-input-container>
                         </td>
                         <td>
                             <md-input-container flex>
                                 <label>Phone number</label> 
-                                <input ng-model="$root.Foodie.phone_number">
+                                <input ng-model="$root.User.Phone">
                             </md-input-container>
                         </td>
                     </tr>
@@ -64,13 +56,13 @@ and open the template in the editor.
                         <td>
                             <md-input-container flex>
                                 <label>address part 1</label> 
-                                <input ng-model="$root.Foodie.address_part_1">
+                                <input ng-model="$root.User.AddressPart1">
                             </md-input-container>
                         </td>
                         <td>
                             <md-input-container flex>
                                 <label>address part 2</label> 
-                                <input ng-model="$root.Foodie.address_part_2">
+                                <input ng-model="$root.User.AddressPart2">
                             </md-input-container>
                         </td>
                     </tr>

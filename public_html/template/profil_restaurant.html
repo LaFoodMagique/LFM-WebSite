@@ -22,57 +22,101 @@ and open the template in the editor.
             </div>
         </md-toolbar>
         <md-content class="md-padding">
-            <form name="updateRestaurant">
-                <table>
-                    <tr>
-                        <td>
-                            <md-input-container flex>
-                                <label>First name</label> 
-                                <input ng-model="$root.User.FirstName">
-                            </md-input-container>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <md-input-container flex>
-                                <label>Email</label> 
-                                <input ng-model="$root.User.Email">
-                            </md-input-container>
-                        </td>
-                        <td>
-                            <md-input-container flex>
-                                <label>Phone number</label> 
-                                <input ng-model="$root.User.Phone">
-                            </md-input-container>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <md-input-container flex>
-                                <label>address part 1</label> 
-                                <input ng-model="$root.User.AddressPart1">
-                            </md-input-container>
-                        </td>
-                        <td>
-                            <md-input-container flex>
-                                <label>address part 2</label> 
-                                <input ng-model="$root.User.AddressPart2">
-                            </md-input-container>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Open hour</label> 
-                            <ng-timepicker initTime="{{$root.User.OpenHour}}" ng-model="$root.User.OpenHour"></ng-timepicker>
-                        </td>
-                        <td>
-                            <label>Close hour</label>
-                            <ng-timepicker initTime="{{$root.User.CloseHour}}" ng-model="$root.User.CloseHour"></ng-timepicker>
-                        </td>
-                    </tr>
-                </table>
-                <md-button class="md-raised btn pull-right" ng-click="restaurantUpdate()">Update</md-button>
-            </form>
+             <md-tabs md-dynamic-height md-border-bottom>
+                 <md-tab label="Update">
+                    <form name="updateRestaurant">
+                        <table>
+                            <tr>
+                                <td>
+                                    <md-input-container flex>
+                                        <label>First name</label> 
+                                        <input ng-model="$root.User.FirstName">
+                                    </md-input-container>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <md-input-container flex>
+                                        <label>Email</label> 
+                                        <input ng-model="$root.User.Email">
+                                    </md-input-container>
+                                </td>
+                                <td>
+                                    <md-input-container flex>
+                                        <label>Phone number</label> 
+                                        <input ng-model="$root.User.Phone">
+                                    </md-input-container>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <md-input-container flex>
+                                    <label>address part 1</label> 
+                                    <input ng-model="$root.User.AddressPart1">
+                                    </md-input-container>
+                                </td>
+                                <td>
+                                    <md-input-container flex>
+                                        <label>address part 2</label> 
+                                        <input ng-model="$root.User.AddressPart2">
+                                    </md-input-container>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Open hour</label> 
+                                    <ng-timepicker initTime="{{$root.User.OpenHour}}" ng-model="$root.User.OpenHour"></ng-timepicker>
+                                </td>
+                                <td>
+                                    <label>Close hour</label>
+                                    <ng-timepicker initTime="{{$root.User.CloseHour}}" ng-model="$root.User.CloseHour"></ng-timepicker>
+                                </td>
+                            </tr>
+                            <tr>
+                                
+                            </tr>
+                        </table>
+                        <md-button class="md-raised btn pull-right" ng-click="restaurantUpdate()">Update</md-button>
+                    </form> 
+                 </md-tab>
+                 <md-tab label="Closed date">
+                     <table>
+                        <tr>
+                            <td>
+                                <h4>Start close Date</h4>
+                                <md-datepicker ng-model="closedDate.DateClosed" md-placeholder="Enter date"></md-datepicker>
+                             </td>
+                            <td>
+                                <h4>End Close Date</h4>
+                                <md-datepicker ng-model="closedDate.DateReOpen" md-placeholder="Enter date"></md-datepicker>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                               <md-button class="md-raised btn pull-right" ng-click="addCloseDate()">Add date</md-button> 
+                            </td>
+                        </tr>
+                     </table>
+                     <md-card style="background-color: #eee;">
+                        <h2>Close Date</h2>
+                        <md-list>
+                            <md-item ng-repeat="closeDates in $root.User.CloseDates">
+                                <md-button class="md-raised btn pull-right" ng-click="deleteCloseDate(closeDates.Id)">Delete</md-button>
+                                <md-item-content>
+                                    <div class="md-tile-left inset" hide-sm>
+                                        <user-avatar></user-avatar>
+                                    </div>
+                                    <div class="md-tile-content">
+                                        <h3>Closed : {{closeDates.DateClosed}}</h3>
+                                        <h4>Re-open : {{closeDates.DateReOpen}}</h4>
+                                    </div>
+                                </md-item-content>
+                            </md-item>
+                        </md-list>
+                    </md-card>
+                 </md-tab>
+            </md-tabs>
         </md-content>
     </md-dialog>
     </body>

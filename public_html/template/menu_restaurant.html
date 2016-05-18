@@ -39,20 +39,22 @@ and open the template in the editor.
                                                 <md-card-content>
                                                     <md-list>
                                                         <md-item ng-repeat="item in $root.RestaurantMenus | filter:search">
-                                                            <md-button class="md-raised btn pull-left" ng-show="item.isCollapsed === false" ng-hide="item.isCollapsed === true"  ng-click="item.isCollapsed = !item.isCollapsed">Show the Dishes</md-button>
-                                                            <md-button class="md-raised btn pull-left" ng-show="item.isCollapsed === true" ng-hide="item.isCollapsed === false" ng-click="item.isCollapsed = !item.isCollapsed">Hide the Dishes</md-button>
-                                                            <md-button class="md-raised btn pull-right"  ng-click="deleteMenu(item.Id)">Delete</md-button>
-                                                            <br>
-                                                            <br>
-                                                            <md-item-content>
-                                                                <div class="md-tile-left inset" hide-sm>
-                                                                    <user-avatar></user-avatar>
-                                                                </div>
-                                                                <div class="md-tile-content">
-                                                                    <h3>{{item.Name}}</h3>
-                                                                    <h4>{{item.Description}}</h4>
-                                                                </div>
-                                                            </md-item-content>
+                                                            <div class="row">
+                                                                <md-button class="md-raised btn pull-left" ng-show="item.isCollapsed === false" ng-hide="item.isCollapsed === true"  ng-click="item.isCollapsed = !item.isCollapsed">Show the Dishes</md-button>
+                                                                <md-button class="md-raised btn pull-left" ng-show="item.isCollapsed === true" ng-hide="item.isCollapsed === false" ng-click="item.isCollapsed = !item.isCollapsed">Hide the Dishes</md-button>
+                                                                <md-button class="md-raised btn pull-right"  ng-click="deleteMenu(item.Id)">Delete</md-button>
+                                                            </div>
+                                                            <div class="row">
+                                                                <md-item-content>
+                                                                    <div class="md-tile-left inset" hide-sm>
+                                                                        <user-avatar></user-avatar>
+                                                                    </div>
+                                                                    <div class="md-tile-content">
+                                                                        <h3>{{item.Name}}</h3>
+                                                                        <h4>{{item.Description}}</h4>
+                                                                    </div>
+                                                                </md-item-content>
+                                                            </div>
                                                             <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                                             <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                                 
@@ -111,7 +113,7 @@ and open the template in the editor.
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <label>Date</label>
+                                <label>Description</label>
                                 <textarea style="width: 950px;" ng-model="menu.description"></textarea>
                             </div>
                         </div>

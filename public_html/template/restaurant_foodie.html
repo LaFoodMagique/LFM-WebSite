@@ -47,13 +47,38 @@ and open the template in the editor.
                                     <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                     <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                     
-                                    <div style="background-color: #eee;" class="row" ng-show="item.showReservation === true" ng-hide="item.showReservation === false">
+                                    <div class="row" ng-show="item.showReservation === true" ng-hide="item.showReservation === false">
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <md-content>
-                                                        <h4>Date</h4>
-                                                        <md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker>
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <h4>Date</h4>
+                                                                    <md-datepicker ng-model="addReserv.date" md-placeholder="Enter date"></md-datepicker>
+                                                                </td>
+                                                                <td>
+                                                                    <h4>Time</h4>
+                                                                    <ng-timepicker ng-model="addReserv.hour"></ng-timepicker>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <md-input-container flex>
+                                                                        <label>Number of person</label> 
+                                                                        <input ng-model="addReserv.nbPerson">
+                                                                    </md-input-container>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <label>Comment</label>
+                                                                    <textarea style="width: 500px;" ng-model="addReserv.comment"></textarea>
+                                                                </td>
+                                                            </tr>
+                                                            <md-button class="md-raised btn pull-right" ng-click="addReservation(item.Id)">Add</md-button>
+                                                        </table>
                                                     </md-content>
                                                 </div>
                                             </div>
@@ -61,9 +86,18 @@ and open the template in the editor.
                                     </div>
                                     
                                     <div class="row" ng-show="item.isCollapsedComment === true" ng-hide="item.isCollapsedComment === false">
-                                        <md-card style="background-color: #eee;" flex-get-sm="90" flex-gt-md="80">
-                                            <h2>Comments</h2>
+                                        <md-card style="background-color: #eee;">
+                                            <h2>Comments</h2>      
                                             <md-list>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <md-button class="md-raised btn pull-right"  ng-click="addCommentRestaurant(item.Id)">Add</md-button>
+                                                        <textarea style="width: 600px;" ng-model="commentRestaurant.comment"></textarea>
+                                                        <uib-rating style="margin-left: 50px; min-height: 100px;" ng-model="commentRestaurant.mark" max="max" read-only="isReadonly" on-hover="hoveringIver(value)" on-leave="overStar = null" 
+                                                                    titles="['one', 'two', 'three']" aria-labelledby='default-rating'></uib-rating>
+                                                    </div>
+                                                </div>
+                                                
                                                 <md-item ng-repeat="comment in item.Comment">
                                                     <md-item-content>
                                                         <div class="md-tile-left inset" hide-sm>
@@ -86,22 +120,24 @@ and open the template in the editor.
                                                 <h2>Menus</h2>
                                                 <md-list>
                                                     <md-item ng-repeat="menu in item.Menu">
-                                                        <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsed === true" ng-hide="menu.isCollapsed === false"  ng-click="menu.isCollapsed = !menu.isCollapsed">Hide the Comments</md-button>
-                                                        <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsed === false" ng-hide="menu.isCollapsed === true" ng-click="loadComs($parent.item.Id, $parent.$index, menu.Id, $index)">Show the Comments</md-button>
-                                                        <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsedDish === true" ng-hide="menu.isCollapsedDish === false"  ng-click="menu.isCollapsedDish = !menu.isCollapsedDish">Hide the dishes</md-button>
-                                                        <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsedDish === false" ng-hide="menu.isCollapsedDish === true" ng-click="menu.isCollapsedDish = !menu.isCollapsedDish">Show the dishes</md-button>
-                                                        <br>
-                                                        <br>
-                                                        <md-item-content>
-                                                            <div class="md-tile-left inset" hide-sm>
-                                                                <user-avatar></user-avatar>
-                                                            </div>
-                                                            <div class="md-tile-content">
-                                                                <h3>Name : {{menu.Name}}</h3>
-                                                                <h4>Description : {{menu.Description}}</h4>
-                                                                <h4>Note from users : {{menu.Mark}}</h4>
-                                                            </div>
-                                                        </md-item-content>
+                                                        <div class="row">
+                                                            <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsed === true" ng-hide="menu.isCollapsed === false"  ng-click="menu.isCollapsed = !menu.isCollapsed">Hide the Comments</md-button>
+                                                            <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsed === false" ng-hide="menu.isCollapsed === true" ng-click="loadComs($parent.item.Id, $parent.$index, menu.Id, $index)">Show the Comments</md-button>
+                                                            <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsedDish === true" ng-hide="menu.isCollapsedDish === false"  ng-click="menu.isCollapsedDish = !menu.isCollapsedDish">Hide the dishes</md-button>
+                                                            <md-button class="md-raised btn pull-left" ng-show="menu.isCollapsedDish === false" ng-hide="menu.isCollapsedDish === true" ng-click="menu.isCollapsedDish = !menu.isCollapsedDish">Show the dishes</md-button>
+                                                        </div>
+                                                        <div class="row">
+                                                            <md-item-content>
+                                                                <div class="md-tile-left inset" hide-sm>
+                                                                    <user-avatar></user-avatar>
+                                                                </div>
+                                                                <div class="md-tile-content">
+                                                                    <h3>Name : {{menu.Name}}</h3>
+                                                                    <h4>Description : {{menu.Description}}</h4>
+                                                                    <h4>Note from users : {{menu.Mark}}</h4>
+                                                                </div>
+                                                            </md-item-content>
+                                                        </div>
                                                         <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                                         <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                                         
@@ -111,6 +147,11 @@ and open the template in the editor.
                                                                     <h2>Dishes</h2>
                                                                     <md-list>
                                                                         <md-item ng-repeat="dish in menu.Dish">
+                                                                            <div class="row">
+                                                                            <md-button class="md-raised btn pull-left" ng-show="dish.isCollapsedComment === true" ng-hide="dish.isCollapsedComment === false"  ng-click="dish.isCollapsedComment = !dish.isCollapsedComment">Hide the Comments</md-button>
+                                                                            <md-button class="md-raised btn pull-left" ng-show="dish.isCollapsedComment === false" ng-hide="dish.isCollapsedComment === true" ng-click="loadComsDishInMenu(item.Id, dish.Id, $parent.$parent.$index, $parent.$index, $index)">Show the Comments</md-button>
+                                                                            </div>
+                                                                            <div class="row">
                                                                                 <md-item-content>
                                                                                     <div class="md-tile-left inset" hide-sm>
                                                                                         <user-avatar></user-avatar>
@@ -120,8 +161,38 @@ and open the template in the editor.
                                                                                         <h4>Description : {{dish.Description}}</h4>
                                                                                     </div>
                                                                                 </md-item-content>
+                                                                            </div>
                                                                                 <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                                                                 <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                                                                                
+                                                                                <div class="row" ng-show="dish.isCollapsedComment === true" ng-hide="dish.isCollapsedComment === false">
+                                                                                    <md-card style="background-color: #ddd;">
+                                                                                        <md-card-content>
+                                                                                            <h2>Comments</h2>
+                                                                                            <md-list>
+                                                                                                <md-button class="md-raised btn pull-right"  ng-click="addCommentDish(item.Id, dish.Id)">Add</md-button>
+                                                                                                <textarea style="width: 600px;" ng-model="commentDish.comment"></textarea>
+                                                                                                <uib-rating style="margin-left: 50px;" ng-model="commentDish.mark" max="max" read-only="isReadonly" on-hover="hoveringIver(value)" on-leave="overStar = null" 
+                                                                                                            titles="['one', 'two', 'three']" aria-labelledby='default-rating'></uib-rating>
+                                                                                                <md-item ng-repeat="comment in dish.Comment">
+                                                                                                    <md-item-content>
+                                                                                                        <div class="md-tile-left inset" hide-sm>
+                                                                                                            <user-avatar></user-avatar>
+                                                                                                        </div>
+                                                                                                        <div class="md-tile-content">
+                                                                                                            <h3>Name : {{comment.Name}}</h3>
+                                                                                                            <h4>Comment : {{comment.Comment}}</h4>
+                                                                                                            <h4>Mark : {{comment.Mark}}</h4>
+                                                                                                        </div>
+                                                                                                    </md-item-content>
+                                                                                                    <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                                                                                                    <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                                                                                                </md-item>
+                                                                                            </md-list>
+                                                                                        </md-card-content>
+                                                                                    </md-card>
+                                                                                </div>
+                                                                                
                                                                         </md-item>
                                                                     </md-list>
                                                                 </md-card-content>
@@ -133,6 +204,10 @@ and open the template in the editor.
                                                                 <md-card-content>
                                                                     <h2>Comments</h2>
                                                                     <md-list>
+                                                                        <md-button class="md-raised btn pull-right"  ng-click="addCommentMenu(item.Id, menu.Id)">Add</md-button>
+                                                                        <textarea style="width: 600px;" ng-model="commentMenu.comment"></textarea>
+                                                                        <uib-rating style="margin-left: 50px;" ng-model="commentMenu.mark" max="max" read-only="isReadonly" on-hover="hoveringIver(value)" on-leave="overStar = null" 
+                                                                                    titles="['one', 'two', 'three']" aria-labelledby='default-rating'></uib-rating>
                                                                         <md-item ng-repeat="comment in menu.Comment">
                                                                                 <md-item-content>
                                                                                     <div class="md-tile-left inset" hide-sm>
@@ -163,20 +238,22 @@ and open the template in the editor.
                                                 <h2>Dishes</h2>
                                                 <md-list>
                                                     <md-item ng-repeat="dish in item.Dish">
-                                                        <md-button class="md-raised btn pull-left" ng-show="dish.isCollapsed === true" ng-hide="dish.isCollapsed === false"  ng-click="dish.isCollapsed = !dish.isCollapsed">Hide the Comments</md-button>
-                                                        <md-button class="md-raised btn pull-left" ng-show="dish.isCollapsed === false" ng-hide="dish.isCollapsed === true" ng-click="loadComsDish($parent.item.Id, $parent.$index, dish.Id, $index)">Show the Comments</md-button>
-                                                        <br>
-                                                        <br>
-                                                        <md-item-content>
-                                                            <div class="md-tile-left inset" hide-sm>
-                                                                <user-avatar></user-avatar>
-                                                            </div>
-                                                            <div class="md-tile-content">
-                                                                <h3>Name : {{dish.Name}}</h3>
-                                                                <h4>Description : {{dish.Description}}</h4>
-                                                                <h4>Mark from users : {{dish.Mark}}</h4>
-                                                            </div>
-                                                        </md-item-content>
+                                                        <div class="row">
+                                                            <md-button class="md-raised btn pull-left" ng-show="dish.isCollapsed === true" ng-hide="dish.isCollapsed === false"  ng-click="dish.isCollapsed = !dish.isCollapsed">Hide the Comments</md-button>
+                                                            <md-button class="md-raised btn pull-left" ng-show="dish.isCollapsed === false" ng-hide="dish.isCollapsed === true" ng-click="loadComsDish($parent.item.Id, $parent.$index, dish.Id, $index)">Show the Comments</md-button>
+                                                        </div>
+                                                        <div class="row">
+                                                            <md-item-content>
+                                                                <div class="md-tile-left inset" hide-sm>
+                                                                    <user-avatar></user-avatar>
+                                                                </div>
+                                                                <div class="md-tile-content">
+                                                                    <h3>Name : {{dish.Name}}</h3>
+                                                                    <h4>Description : {{dish.Description}}</h4>
+                                                                    <h4>Mark from users : {{dish.Mark}}</h4>
+                                                                </div>
+                                                            </md-item-content>
+                                                        </div>
                                                         <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                                         <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                                         
@@ -185,7 +262,11 @@ and open the template in the editor.
                                                                 <md-card-content>
                                                                     <h2>Comments</h2>
                                                                     <md-list>
-                                                                        <md-item ng-repeat="comment in dish.Comment">
+                                                                            <md-button class="md-raised btn pull-right"  ng-click="addCommentDishes(item.Id, dish.Id)">Add</md-button>
+                                                                            <textarea style="width: 600px;" ng-model="commentDishes.comment"></textarea>
+                                                                            <uib-rating style="margin-left: 50px;" ng-model="commentDishes.mark" max="max" read-only="isReadonly" on-hover="hoveringIver(value)" on-leave="overStar = null" 
+                                                                                        titles="['one', 'two', 'three']" aria-labelledby='default-rating'></uib-rating>
+                                                                            <md-item ng-repeat="comment in dish.Comment">
                                                                                 <md-item-content>
                                                                                     <div class="md-tile-left inset" hide-sm>
                                                                                         <user-avatar></user-avatar>
@@ -198,7 +279,7 @@ and open the template in the editor.
                                                                                 </md-item-content>
                                                                                 <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                                                                 <md-divider hide-gt-sm ng-if="!$last"></md-divider>
-                                                                        </md-item>
+                                                                            </md-item>
                                                                     </md-list>
                                                                 </md-card-content>
                                                             </md-card>
