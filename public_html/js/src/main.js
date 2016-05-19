@@ -25,6 +25,7 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
   $rootScope.Reservations = {};
   $rootScope.UsersWithoutFoodie = {};
   $rootScope.HomeComments = {};
+  $rootScope.ReservationsRestaurant = {};
         
 
     $scope.rate = 3;    
@@ -104,6 +105,11 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
         link : '',
         title: 'Comment',
         icon: 'comment'
+    },
+    {
+        link : '',
+        title: 'Reservation',
+        icon : 'order'
     }
   ];
   
@@ -342,9 +348,27 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
         }, function errorCallback(response) {
             alert('Error while getting your comments.');
         });
+        
         $mdDialog.show({
         controller: DialogController,
         templateUrl:'template/comments_restaurant.html',
+        targetEvent: ev
+        });
+    }
+    else if (item.title === "Reservation")
+    {
+        $http({
+            method:'GET',
+            url:'http://127.0.0.1:3000/api/restaurant/' + $rootScope.User.RestaurantId + '/reservations'
+        }).then(function successCallback(response) {
+            $rootScope.ReservationsRestaurant = response.data.reservations;
+        }, function errorCallback(response) {
+            alert('Error while getting your reservation.');
+        });
+        
+        $mdDialog.show({
+        controller: DialogController,
+        templateUrl:'template/reservation_restaurant.html',
         targetEvent: ev
         });
     }
